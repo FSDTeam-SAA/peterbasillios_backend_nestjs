@@ -35,25 +35,25 @@ export class DashboardService {
   async dashboardOverView() {
     const [totalProjects, totalService, contactInquiries, totalImagesResult] =
       await Promise.all([
-      this.projectModel.countDocuments(),
-      this.serviceModel.countDocuments(),
-      this.contactModel.countDocuments(),
-      this.projectModel.aggregate([
-        {
-          $project: {
-            imageCount: {
-              $cond: [{ $isArray: '$image' }, { $size: '$image' }, 0],
+        this.projectModel.countDocuments(),
+        this.serviceModel.countDocuments(),
+        this.contactModel.countDocuments(),
+        this.projectModel.aggregate([
+          {
+            $project: {
+              imageCount: {
+                $cond: [{ $isArray: '$image' }, { $size: '$image' }, 0],
+              },
             },
           },
-        },
-        {
-          $group: {
-            _id: null,
-            total: { $sum: '$imageCount' },
+          {
+            $group: {
+              _id: null,
+              total: { $sum: '$imageCount' },
+            },
           },
-        },
-      ]),
-    ]);
+        ]),
+      ]);
 
     return {
       totalProjects,
