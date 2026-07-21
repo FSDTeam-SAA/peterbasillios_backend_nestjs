@@ -24,6 +24,12 @@ WORKDIR /usr/src/app
 # CI=true dile npm/Nest non-interactive mode-e thake
 ENV CI=true
 
+# node:20-alpine-e bundled npm (10.x) package-lock.json (npm 11 diye generate kora)
+# thik moto porte pare na - optional peer deps (@emnapi/*) resolve kore ana napi karone
+# "npm ci" lock file out-of-sync error dey. Tai npm version pin kore lockfile-er
+# generator version-er sathe match kora hocche.
+RUN npm install -g npm@11.6.2
+
 # ============================================================
 # Stage 1: Install all dependencies
 # ============================================================
