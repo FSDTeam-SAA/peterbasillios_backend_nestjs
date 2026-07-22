@@ -16,6 +16,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import {
   ApiBearerAuth,
+  ApiBody,
   ApiConsumes,
   ApiOperation,
   ApiQuery,
@@ -121,6 +122,58 @@ export class ServiceController {
 
     return {
       message: 'Service deleted successfully',
+      data: result,
+    };
+  }
+
+  @Patch(':id/add-image')
+  @ApiOperation({ summary: 'add service image' })
+  @ApiBearerAuth('access-token')
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      required: ['image'],
+      properties: {
+        image: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  @UseGuards(AuthGuard('admin'))
+  @UseInterceptors(FileInterceptor('image', fileUpload.uploadConfig))
+  @HttpCode(HttpStatus.OK)
+  async addImage(
+    @Param('id') id: string,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    const result = await this.serviceService.addImage(id, file);
+
+    return {
+      message: 'Service image added successfully',
+      data: result,
+    };
+  }
+
+  @Patch(':id/remove-image')
+  @ApiOperation({ summary: 'remove service image' })
+  @ApiBearerAuth('access-token')
+  @ApiBody({
+    required: false,
+    schema: {
+      type: 'object',
+      properties: {},
+    },
+  })
+  @UseGuards(AuthGuard('admin'))
+  @HttpCode(HttpStatus.OK)
+  async removeImage(@Param('id') id: string) {
+    const result = await this.serviceService.removeImage(id);
+
+    return {
+      message: 'Service image removed successfully',
       data: result,
     };
   }

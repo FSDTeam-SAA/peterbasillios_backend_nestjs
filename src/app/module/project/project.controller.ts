@@ -16,6 +16,7 @@ import {
 import { FilesInterceptor } from '@nestjs/platform-express';
 import {
   ApiBearerAuth,
+  ApiBody,
   ApiConsumes,
   ApiOperation,
   ApiQuery,
@@ -135,6 +136,21 @@ export class ProjectController {
   @ApiOperation({ summary: 'add project image' })
   @ApiBearerAuth('access-token')
   @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      required: ['image'],
+      properties: {
+        image: {
+          type: 'array',
+          items: {
+            type: 'string',
+            format: 'binary',
+          },
+        },
+      },
+    },
+  })
   @UseGuards(AuthGuard('admin'))
   @UseInterceptors(
     FilesInterceptor('image', undefined, fileUpload.uploadConfig),
@@ -155,6 +171,18 @@ export class ProjectController {
   @Patch(':id/remove-image')
   @ApiOperation({ summary: 'remove project image' })
   @ApiBearerAuth('access-token')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      required: ['image'],
+      properties: {
+        image: {
+          type: 'string',
+          example: 'https://res.cloudinary.com/example/image/upload/project.jpg',
+        },
+      },
+    },
+  })
   @UseGuards(AuthGuard('admin'))
   @HttpCode(HttpStatus.OK)
   async removeImage(@Param('id') id: string, @Body('image') image: string) {

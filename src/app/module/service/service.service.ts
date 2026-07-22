@@ -83,4 +83,36 @@ export class ServiceService {
     if (!result) throw new HttpException('Service not found', 404);
     return result;
   }
+
+  async addImage(id: string, file?: Express.Multer.File) {
+    const service = await this.serviceModel.findById(id);
+    if (!service) throw new HttpException('Service not found', 404);
+
+    if (!file) {
+      throw new HttpException('Image file is required', 400);
+    }
+
+    const uploadedFile = await fileUpload.uploadToCloudinary(file);
+
+    const result = await this.serviceModel.findByIdAndUpdate(
+      id,
+      { image: uploadedFile.url },
+      { new: true },
+    );
+
+    return result;
+  }
+
+  async removeImage(id: string) {
+    const service = await this.serviceModel.findById(id);
+    if (!service) throw new HttpException('Service not found', 404);
+
+    const result = await this.serviceModel.findByIdAndUpdate(
+      id,
+      { $unset: { image: '' } },
+      { new: true },
+    );
+
+    return result;
+  }
 }
