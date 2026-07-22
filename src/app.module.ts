@@ -10,18 +10,18 @@ import { DashboardModule } from './app/module/dashboard/dashboard.module';
 import { NotificationModule } from './app/module/notification/notification.module';
 import { ProjectModule } from './app/module/project/project.module';
 import { ServiceModule } from './app/module/service/service.module';
-import { SubscribeModule } from './app/module/subscribe/subscribe.module';
-import { UserModule } from './app/module/user/user.module';
+// import { SubscribeModule } from './app/module/subscribe/subscribe.module';
+// import { UserModule } from './app/module/user/user.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     MongooseModule.forRoot(config.mongoUri),
-    UserModule,
+    // UserModule,
     AuthModule,
     ContactModule,
     DashboardModule,
-    SubscribeModule,
+    // SubscribeModule,
     ServiceModule,
     ProjectModule,
     NotificationModule,
