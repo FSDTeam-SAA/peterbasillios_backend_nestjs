@@ -1,14 +1,13 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 import {
+  IsBoolean,
   IsEmail,
   IsEnum,
   IsOptional,
   IsString,
   MinLength,
-  IsDateString,
-  IsBoolean,
 } from 'class-validator';
-import { Transform } from 'class-transformer';
 
 export class CreateUserDto {
   @ApiProperty({ example: '' })
@@ -47,22 +46,22 @@ export class CreateUserDto {
   @ApiPropertyOptional({ example: '' })
   @IsOptional()
   @IsString()
-  country?: string;
+  bio?: string;
 
   @ApiPropertyOptional({ example: '' })
   @IsOptional()
   @IsString()
-  city?: string;
+  streetAddress?: string;
 
   @ApiPropertyOptional({ example: '' })
   @IsOptional()
   @IsString()
-  address?: string;
+  location?: string;
 
   @ApiPropertyOptional({ example: '' })
   @IsOptional()
-  @IsDateString()
-  dateOfBirth?: Date;
+  @IsString()
+  postCode?: string;
 
   @ApiPropertyOptional()
   @IsOptional()

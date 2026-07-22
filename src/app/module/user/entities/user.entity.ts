@@ -40,19 +40,19 @@ export class User {
   phoneNumber!: string;
 
   @Prop()
-  country!: string;
+  bio!: string;
 
   @Prop()
-  city!: string;
+  streetAddress!: string;
 
   @Prop()
-  address!: string;
+  location!: string;
+
+  @Prop()
+  postCode!: string;
 
   @Prop()
   profilePicture!: string;
-
-  @Prop()
-  dateOfBirth?: Date;
 
   @Prop()
   otp?: string;

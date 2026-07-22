@@ -131,4 +131,38 @@ export class ProjectController {
       data: result,
     };
   }
+  @Patch(':id/add-image')
+  @ApiOperation({ summary: 'add project image' })
+  @ApiBearerAuth('access-token')
+  @ApiConsumes('multipart/form-data')
+  @UseGuards(AuthGuard('admin'))
+  @UseInterceptors(
+    FilesInterceptor('image', undefined, fileUpload.uploadConfig),
+  )
+  @HttpCode(HttpStatus.OK)
+  async addImage(
+    @Param('id') id: string,
+    @UploadedFiles() files?: Express.Multer.File[],
+  ) {
+    const result = await this.projectService.addImage(id, files);
+
+    return {
+      message: 'Project image added successfully',
+      data: result,
+    };
+  }
+
+  @Patch(':id/remove-image')
+  @ApiOperation({ summary: 'remove project image' })
+  @ApiBearerAuth('access-token')
+  @UseGuards(AuthGuard('admin'))
+  @HttpCode(HttpStatus.OK)
+  async removeImage(@Param('id') id: string, @Body('image') image: string) {
+    const result = await this.projectService.removeImage(id, image);
+
+    return {
+      message: 'Project image removed successfully',
+      data: result,
+    };
+  }
 }

@@ -88,4 +88,50 @@ export class ProjectService {
     if (!result) throw new HttpException('Project not found', 404);
     return result;
   }
+
+  async addImage(id: string, files?: Express.Multer.File[]) {
+    const project = await this.projectModel.findById(id);
+    if (!project) throw new HttpException('Project not found', 404);
+
+    if (!files || files.length === 0) {
+      throw new HttpException('Image file is required', 400);
+    }
+
+    const imageupload = await Promise.all(
+      files.map((file) => fileUpload.uploadToCloudinary(file)),
+    );
+
+    const images = imageupload.map((file) => file.url);
+
+    const result = await this.projectModel.findByIdAndUpdate(
+      id,
+      {
+        $push: {
+          image: {
+            $each: images,
+          },
+        },
+      },
+      { new: true },
+    );
+
+    return result;
+  }
+
+  async removeImage(id: string, image: string) {
+    const project = await this.projectModel.findById(id);
+    if (!project) throw new HttpException('Project not found', 404);
+
+    const result = await this.projectModel.findByIdAndUpdate(
+      id,
+      {
+        $pull: {
+          image,
+        },
+      },
+      { new: true },
+    );
+
+    return result;
+  }
 }
