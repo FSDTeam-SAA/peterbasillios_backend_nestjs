@@ -178,7 +178,8 @@ export class ProjectController {
       properties: {
         image: {
           type: 'string',
-          example: 'https://res.cloudinary.com/example/image/upload/project.jpg',
+          example:
+            'https://res.cloudinary.com/example/image/upload/project.jpg',
         },
       },
     },
